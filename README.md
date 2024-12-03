@@ -5,7 +5,7 @@ My advent of code attempts - 2024
 |------------------------------------------------|---------------------------------------|:------:|:------:|
 | [Day 1](https://adventofcode.com/2024/day/1)   | [Historian Hysteria](Day01/README.md) |   ⭐    |   🌟   |
 | [Day 2](https://adventofcode.com/2024/day/2)   | [Red-Nosed Reports](Day02/README.md)  |   ⭐    |   🌟   |
-| [Day 3](https://adventofcode.com/2024/day/3)   |                                       |        |        |
+| [Day 3](https://adventofcode.com/2024/day/3)   | [Mull It Over](Day03/README.md)       |   ⭐    |   🌟   |
 | [Day 4](https://adventofcode.com/2024/day/4)   |                                       |        |        |
 | [Day 5](https://adventofcode.com/2024/day/5)   |                                       |        |        |
 | [Day 6](https://adventofcode.com/2024/day/6)   |                                       |        |        |
