@@ -6,7 +6,7 @@ My advent of code attempts - 2024
 | [Day 1](https://adventofcode.com/2024/day/1)   | [Historian Hysteria](Day01/README.md) | Kotlin     |   ⭐    |   🌟   |
 | [Day 2](https://adventofcode.com/2024/day/2)   | [Red-Nosed Reports](Day02/README.md)  | Scala      |   ⭐    |   🌟   |
 | [Day 3](https://adventofcode.com/2024/day/3)   | [Mull It Over](Day03/README.md)       | JavaScript |   ⭐    |   🌟   |
-| [Day 4](https://adventofcode.com/2024/day/4)   |                                       |            |        |        |
+| [Day 4](https://adventofcode.com/2024/day/4)   | [Ceres Search](Day04/README.md)       | Java       |   ⭐    |   🌟   |
 | [Day 5](https://adventofcode.com/2024/day/5)   |                                       |            |        |        |
 | [Day 6](https://adventofcode.com/2024/day/6)   |                                       |            |        |        |
 | [Day 7](https://adventofcode.com/2024/day/7)   |                                       |            |        |        |
