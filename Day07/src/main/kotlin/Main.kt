@@ -3,9 +3,10 @@ package uk.co.stevebosman.example
 import java.io.File
 
 fun main(args: Array<String>) {
-    val solver = Solver()
-    val part1 = read(args[0]).filter { p -> solver.isSolvable(p.first, p.second) }.map { p -> p.first }.sum()
+    val part1 = read(args[0]).filter { p -> Solver(false).isSolvable(p.first, p.second) }.map { p -> p.first }.sum()
     println("Part 1: ${part1}")
+    val part2 = read(args[0]).filter { p -> Solver(true).isSolvable(p.first, p.second) }.map { p -> p.first }.sum()
+    println("Part 2: ${part2}")
 }
 
 fun read(fileName: String): List<Pair<Long, List<Long>>> {
