@@ -9,7 +9,7 @@ My advent of code attempts - 2024
 | [Day 4](https://adventofcode.com/2024/day/4)   | [Ceres Search](Day04/README.md)       | Java       |   ⭐    |   🌟   |
 | [Day 5](https://adventofcode.com/2024/day/5)   | [Print Queue](Day05/README.md)        | Kotlin     |   ⭐    |   🌟   |
 | [Day 6](https://adventofcode.com/2024/day/6)   | [Guard Gallivant](Day06/README.md)    | Scala      |   ⭐    |   🌟   |
-| [Day 7](https://adventofcode.com/2024/day/7)   |                                       |            |        |        |
+| [Day 7](https://adventofcode.com/2024/day/7)   | [Bridge Repair](Day07/README.md)      | Kotlin     |   ⭐    |        |
 | [Day 8](https://adventofcode.com/2024/day/8)   |                                       |            |        |        |
 | [Day 9](https://adventofcode.com/2024/day/9)   |                                       |            |        |        |
 | [Day 10](https://adventofcode.com/2024/day/10) |                                       |            |        |        |
