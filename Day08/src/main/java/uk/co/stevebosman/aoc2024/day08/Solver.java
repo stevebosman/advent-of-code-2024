@@ -8,17 +8,20 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Solver {
   private final Map<Character, List<Position>> antennaPositions;
-  private int rowCount;
-  private int columnCount;
+  private final int rowCount;
+  private final int columnCount;
+  private final boolean resonantHarmonics;
 
-  public Solver(final Path filepath) throws IOException {
+  public Solver(final boolean resonantHarmonics, final Path filepath) throws IOException {
+    this.resonantHarmonics = resonantHarmonics;
     final List<String> lines = Files.readAllLines(filepath);
     this.rowCount = lines.size();
-    this.columnCount = lines.get(0)
+    this.columnCount = lines.getFirst()
                             .length();
     final Map<Character, List<Position>> antennaPositions = new HashMap<>();
     for (int rowIndex = 0; rowIndex < this.rowCount; rowIndex++) {
@@ -35,13 +38,21 @@ public class Solver {
   }
 
   public int solve() {
-    return antennaPositions.values()
-                           .stream()
-                           .map(this::antiNodes)
-                           .flatMap(Collection::stream)
-                           .filter(p -> p.x() >= 0 && p.x() < this.columnCount && p.y() >= 0 && p.y() < this.rowCount)
-                           .collect(Collectors.toSet())
-                           .size();
+    final Set<Position> antiNodes = antennaPositions.values()
+                                            .stream()
+                                            .filter(s -> s.size() > 1)
+                                            .map(this::antiNodes)
+                                            .flatMap(Collection::stream)
+                                            .collect(Collectors.toSet());
+    if (resonantHarmonics) {
+      antennaPositions.values()
+                      .forEach(antiNodes::addAll);
+    }
+    return antiNodes.size();
+  }
+
+  private boolean inRange(final Position p) {
+    return p.x() >= 0 && p.x() < this.columnCount && p.y() >= 0 && p.y() < this.rowCount;
   }
 
   private List<Position> antiNodes(final List<Position> antennas) {
@@ -53,13 +64,21 @@ public class Solver {
           final Position antenna2 = antennas.get(j);
           final int dx = antenna1.x() - antenna2.x();
           final int dy = antenna1.y() - antenna2.y();
-          final Position antiNode1 = new Position(antenna1.x() + dx, antenna1.y() + dy);
-          antiNodes.add(antiNode1);
-          final Position antiNode2 = new Position(antenna2.x() - dx, antenna2.y() - dy);
-          antiNodes.add(antiNode2);
+          addAntiNodes(antiNodes, antenna1, dx, dy);
+          addAntiNodes(antiNodes, antenna2, -dx, -dy);
         }
       }
     }
     return antiNodes;
   }
+
+  private void addAntiNodes(final List<Position> antiNodes, final Position antenna, final int dx, final int dy) {
+    for (int i = 1; i < 100; i++) {
+      final Position antiNode = new Position(antenna.x() + i * dx, antenna.y() + i * dy);
+      if (!inRange(antiNode)) return;
+      antiNodes.add(antiNode);
+      if (!resonantHarmonics) return;
+    }
+  }
+
 }

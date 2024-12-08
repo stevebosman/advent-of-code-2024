@@ -9,7 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SolverTest {
   @Test
-  void testExample() throws IOException {
-    assertEquals(14, new Solver(Path.of("example.txt")).solve());
+  void testExamplePart1() throws IOException {
+    assertEquals(14, new Solver(false, Path.of("example.txt")).solve());
+  }
+  @Test
+  void testExamplePart2() throws IOException {
+    assertEquals(34, new Solver(true, Path.of("example.txt")).solve());
   }
 }
