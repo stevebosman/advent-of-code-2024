@@ -3,7 +3,7 @@ import scala.io.Source
 import scala.util.{Try, Using}
 
 @main
-def main(filename: String): Long =
+def main(filename: String): (Long, Long) =
   def readLines(filename: String): Try[List[String]] =
     Using(Source.fromFile(filename)) { source => source.getLines().toList }
 
@@ -20,8 +20,12 @@ def main(filename: String): Long =
     space
   }
 
+  def checksum(map: List[DiskSpace]) = {
+    map.filter(d => d.value > -1).map(d => d.value * ((d.start * d.size) + d.size * (d.size - 1) / 2)).sum
+  }
+
   @tailrec
-  def remapSpaces(spaces: List[DiskSpace], result: List[DiskSpace] = List()): List[DiskSpace] = {
+  def remapPart1(spaces: List[DiskSpace], result: List[DiskSpace] = List()): List[DiskSpace] = {
     if (spaces.isEmpty) return result
     val current = spaces.head
     val (next, rem) = if (current.value == -1)
@@ -47,13 +51,44 @@ def main(filename: String): Long =
       (next, remaining)
     else
       (List(current), spaces.tail)
-    remapSpaces(rem, result ++ next)
+    remapPart1(rem, result ++ next)
+  }
+
+  @tailrec
+  def replaceFirstGap(d: DiskSpace, spaces: List[DiskSpace], result: List[DiskSpace] = List()): List[DiskSpace] = {
+    if (spaces.isEmpty) return result
+    val current = spaces.head
+    if (current.start >= d.start) {
+      return result ++ spaces
+    } else if (current.value == -1 && current.size >= d.size) {
+      val dNew = DiskSpace(current.start, d.value, d.size)
+      if (current.size == d.size)
+        return (result :+ dNew) ++ clear(d, spaces.tail)
+      else {
+        val dEmpty = DiskSpace(current.start + d.size, -1, current.size - d.size)
+        return (result :+ dNew) ++ clear(d, List(dEmpty) ++ spaces.tail)
+      }
+    }
+
+    replaceFirstGap(d, spaces.tail, result :+ current)
+  }
+
+  def clear(d: DiskSpace, spaces: List[DiskSpace]): List[DiskSpace] = {
+    spaces.filter(d2 => d2 != d)
+  }
+  
+  def remapPart2(spaces: List[DiskSpace]): List[DiskSpace] = {
+    println(spaces)
+    var result = spaces
+    spaces.filter(d => d.value != -1).reverse.foreach { d => println(d); result = replaceFirstGap(d, result) }
+    println(result)
+    result
   }
 
   val line = readLines(filename).get(0)
 
-  val spaces = line.zipWithIndex.flatMap { (a, i) => allocateSpace(a.toInt - 48, i) }.toList
+  val spaces = List.from(line.zipWithIndex.flatMap { (a, i) => allocateSpace(a.toInt - 48, i) }.toList)
 
-  remapSpaces(spaces).map(d => d.value * ((d.start * d.size) + d.size * (d.size - 1) / 2)).sum
+  (checksum(remapPart1(spaces)), checksum(remapPart2(spaces)))
 
 case class DiskSpace(start: Int, value: Long, size: Int)
