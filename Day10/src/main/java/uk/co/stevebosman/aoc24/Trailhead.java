@@ -43,22 +43,7 @@ public class Trailhead {
 
     this.heightMap = heightMap;
     this.map = map;
-  }
 
-  private static void hasNextHeight(final Location location, final int row, final int column, final List<List<Location>> map, final int nextHeight) {
-    final Location nextLocation = map.get(row)
-                           .get(column);
-    if (nextLocation != null && nextHeight == nextLocation.height()) {
-      nextLocation.incrementRoutesFromPrevious();
-      if (nextHeight == 1) {
-        nextLocation.addRoutableFrom(Set.of(location));
-      } else {
-        nextLocation.addRoutableFrom(location.getRoutableFrom());
-      }
-    }
-  }
-
-  public int countTrails() {
     for (int height = 0; height < 9; height++) {
       final int nextHeight = height + 1;
       heightMap.get(height)
@@ -77,7 +62,25 @@ public class Trailhead {
                  }
                });
     }
+  }
 
+  private static void hasNextHeight(final Location location, final int row, final int column, final List<List<Location>> map, final int nextHeight) {
+    final Location nextLocation = map.get(row)
+                           .get(column);
+    if (nextLocation != null && nextHeight == nextLocation.height()) {
+      nextLocation.incrementRoutesFromPrevious();
+      if (nextHeight == 1) {
+        nextLocation.addRoutableFrom(Map.of(location, 1));
+      } else {
+        nextLocation.addRoutableFrom(location.getRoutableFrom());
+      }
+    }
+  }
+
+  public int countTrails() {
     return heightMap.get(9).stream().map(Location::getRoutableFromCount).reduce(Integer::sum).orElse(0);
+  }
+  public int countTrailRoutes() {
+    return heightMap.get(9).stream().map(Location::getUniqueRoutableFromCount).reduce(Integer::sum).orElse(0);
   }
 }

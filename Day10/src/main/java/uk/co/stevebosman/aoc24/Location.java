@@ -1,6 +1,8 @@
 package uk.co.stevebosman.aoc24;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -8,7 +10,7 @@ public final class Location {
   private final int height;
   private final Coordinate coordinate;
   private int routesFromPrevious = 0;
-  private final Set<Location> routableFrom = new HashSet<>();
+  private final Map<Location, Integer> routableFrom = new HashMap<>();
 
   public Location(final int height, final Coordinate coordinate) {
     this.height = height;
@@ -31,15 +33,22 @@ public final class Location {
     routesFromPrevious++;
   }
 
-  public void addRoutableFrom(final Set<Location> routableFrom) {
-    this.routableFrom.addAll(routableFrom);
+  public void addRoutableFrom(final Map<Location, Integer> routableFrom) {
+    for(final Map.Entry<Location, Integer> entry: routableFrom.entrySet()) {
+      final var current = this.routableFrom.computeIfAbsent(entry.getKey(), k->0);
+      this.routableFrom.put(entry.getKey(), current+entry.getValue());
+    }
   }
 
   public int getRoutableFromCount() {
     return routableFrom.size();
   }
 
-  public Set<Location> getRoutableFrom() {
+  public int getUniqueRoutableFromCount() {
+    return routableFrom.values().stream().reduce(Integer::sum).orElse(0);
+  }
+
+  public Map<Location, Integer> getRoutableFrom() {
     return this.routableFrom;
   }
 

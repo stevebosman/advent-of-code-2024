@@ -16,8 +16,20 @@ public class TrailheadTest {
           "example4.txt, 36",
           "input.txt, 0",
   })
-  void examples(final String filename, final int expected) throws IOException {
+  void part1(final String filename, final int expected) throws IOException {
     final int actual = new Trailhead(filename).countTrails();
+    assertEquals(expected, actual);
+  }
+
+  @ParameterizedTest
+  @CsvSource(value = {
+          "example5.txt, 3",
+          "example6.txt, 13",
+          "example7.txt, 227",
+          "input.txt, 0",
+  })
+  void part2(final String filename, final int expected) throws IOException {
+    final int actual = new Trailhead(filename).countTrailRoutes();
     assertEquals(expected, actual);
   }
 }
