@@ -13,7 +13,7 @@ My advent of code attempts - 2024
 | [Day 8](https://adventofcode.com/2024/day/8)   | [Resonant Collinearity](Day08/README.md) | Java       |   ⭐    |   🌟   |
 | [Day 9](https://adventofcode.com/2024/day/9)   | [Disk Fragmenter](Day09/README.md)       | Scala      |   ⭐    |   🌟   |
 | [Day 10](https://adventofcode.com/2024/day/10) | [Hoof It](Day10/README.md)               | Java       |   ⭐    |   🌟   |
-| [Day 11](https://adventofcode.com/2024/day/11) |                                          |            |        |        |
+| [Day 11](https://adventofcode.com/2024/day/11) | [Plutonian Pebbles](Day11/README.md)     | Java       |   ⭐    |   🌟   |
 | [Day 12](https://adventofcode.com/2024/day/12) |                                          |            |        |        |
 | [Day 13](https://adventofcode.com/2024/day/13) |                                          |            |        |        |
 | [Day 14](https://adventofcode.com/2024/day/14) |                                          |            |        |        |
