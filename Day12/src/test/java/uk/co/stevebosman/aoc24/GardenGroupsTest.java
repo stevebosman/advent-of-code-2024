@@ -14,6 +14,7 @@ class GardenGroupsTest {
           "example1.txt,140",
           "example2.txt,772",
           "example3.txt,1930",
+          "input.txt,0",
   })
   void part1(final String filename, final long expected) throws IOException {
     final long actual = new GardenGroups(filename).cost();
