@@ -15,33 +15,46 @@ public class GardenGroups {
   public GardenGroups(final String filename) throws IOException {
     // build map with a border
     try (final Stream<String> lines = Files.lines(Path.of(filename))) {
-      map = new ArrayList<>(lines.map(l -> ("."+l+".").toCharArray())
-                 .toList());
+      map = new ArrayList<>(lines.map(l -> ("." + l + ".").toCharArray())
+                                 .toList());
     }
     width = map.getFirst().length;
-    map.addFirst(".".repeat(width).toCharArray());
-    map.addLast(".".repeat(width).toCharArray());
+    map.addFirst(".".repeat(width)
+                    .toCharArray());
+    map.addLast(".".repeat(width)
+                   .toCharArray());
     height = map.size();
 
   }
 
   public long cost() {
+    return getRegions().stream()
+                       .map(r -> r.area() * r.perimeter())
+                       .reduce(Long::sum)
+                       .orElse(0L);
+  }
+
+  public long discountedCost() {
+    return getRegions().stream()
+                       .map(r -> r.area() * r.sides())
+                       .reduce(Long::sum)
+                       .orElse(0L);
+  }
+
+  private List<Region> getRegions() {
     final var clonedMap = map.stream()
                              .map(char[]::clone)
                              .toList();
     final List<Region> regions = new ArrayList<>();
-    for (int rowIndex = 0; rowIndex < height; rowIndex++) {
+    for (int rowIndex = 1; rowIndex < height - 1; rowIndex++) {
       final char[] row = clonedMap.get(rowIndex);
-      for (int columnIndex = 0; columnIndex < width; columnIndex++) {
+      for (int columnIndex = 1; columnIndex < width - 1; columnIndex++) {
         if (row[columnIndex] != '.') {
           Region.of(clonedMap, rowIndex, columnIndex, this.height, this.width)
                 .ifPresent(regions::add);
         }
       }
     }
-    return regions.stream()
-                  .map(r -> r.area() * r.perimeter())
-                  .reduce(Long::sum)
-                  .orElse(0L);
+    return regions;
   }
 }
