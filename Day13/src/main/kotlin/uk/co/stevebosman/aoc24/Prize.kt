@@ -1,11 +1,11 @@
 package uk.co.stevebosman.aoc24
 
-class Prize(val positionX: Int, val positionY: Int) {
+class Prize(val positionX: Long, val positionY: Long) {
     companion object {
-        fun of(input: String): Prize {
+        fun of(offset: Long, input: String): Prize {
             val split = input.split(":")
             val positions = split[1].split(",")
-            return Prize(positions[0].split("=")[1].toInt(), positions[1].split("=")[1].toInt())
+            return Prize(offset + positions[0].split("=")[1].toLong(), offset + positions[1].split("=")[1].toLong())
         }
     }
 
@@ -22,8 +22,8 @@ class Prize(val positionX: Int, val positionY: Int) {
     }
 
     override fun hashCode(): Int {
-        var result = positionX
-        result = 31 * result + positionY
+        var result = positionX.hashCode()
+        result = 31 * result + positionY.hashCode()
         return result
     }
 
