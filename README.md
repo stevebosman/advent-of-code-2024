@@ -17,7 +17,7 @@ My advent of code attempts - 2024
 | [Day 12](https://adventofcode.com/2024/day/12) | [Garden Groups](Day12/README.md)         | Java       |   ⭐    |   🌟   |
 | [Day 13](https://adventofcode.com/2024/day/13) | [Claw Contraption](Day13/README.md)      | Kotlin     |   ⭐    |   🌟   |
 | [Day 14](https://adventofcode.com/2024/day/14) | [Restroom Redoubt](Day14/README.md)      | Scala      |   ⭐    |   🌟   |
-| [Day 15](https://adventofcode.com/2024/day/15) | [Wareful Woes](Day15/README.md)          | Java       |   ⭐    |        |
+| [Day 15](https://adventofcode.com/2024/day/15) | [Wareful Woes](Day15/README.md)          | Java       |   ⭐    |   🌟   |
 | [Day 16](https://adventofcode.com/2024/day/16) |                                          |            |        |        |
 | [Day 17](https://adventofcode.com/2024/day/17) |                                          |            |        |        |
 | [Day 18](https://adventofcode.com/2024/day/18) |                                          |            |        |        |

@@ -1,4 +1,4 @@
-package uk.co.stevebosman.aoc24;
+package uk.co.stevebosman.aoc24.part1;
 
 import java.io.IOException;
 import java.nio.file.Files;

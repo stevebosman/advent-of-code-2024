@@ -1,4 +1,4 @@
-package uk.co.stevebosman.aoc24;
+package uk.co.stevebosman.aoc24.part1;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -98,7 +98,7 @@ class WarehouseWoesMap {
     if (next == '#') {
       result = false;
     } else if (next == '.') {
-      // just move left
+      // just move up
       result = true;
     } else {
       // attempt push
@@ -128,7 +128,7 @@ class WarehouseWoesMap {
     if (next == '#') {
       result = false;
     } else if (next == '.') {
-      // just move left
+      // just move down
       result = true;
     } else {
       // attempt push
