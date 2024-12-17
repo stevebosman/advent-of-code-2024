@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 public class Solver {
   private final List<List<Cell>> chart;
+  private final Set<DirectionalPosition> seats = new HashSet<>();
 
   public Solver(final String filename) throws IOException {
     try (final var lines = Files.lines(Path.of(filename))) {
@@ -25,61 +26,58 @@ public class Solver {
 
   public int solve() {
     int result = 0;
-    final Position start = new Position(Direction.East, 1, chart.size() - 2);
-    final Position end = new Position(null, chart.getFirst()
-                                                 .size() - 2, 1);
+    final DirectionalPosition start = new DirectionalPosition(Direction.East, new Position(1, chart.size() - 2));
+    final Position end = new Position(chart.getFirst().size() - 2, 1);
     setDistance(start, 0);
-    final Map<Integer, Set<Position>> possible = getNeighbours(0, start);
-    for (int i = 1; i < 1_000_000; i++) {
-      if (possible.containsKey(i)) {
-        final int ifinal = i;
-        final Set<Position> positions = possible.get(i);
-        possible.remove(i);
+    final Map<Integer, Set<DirectionalPosition>> possible = getNeighbours(0, start);
+    for (int potentialCost = 1; potentialCost < 1_000_000 && result ==0; potentialCost++) {
+      if (possible.containsKey(potentialCost)) {
+        final Set<DirectionalPosition> positions = possible.get(potentialCost);
+        possible.remove(potentialCost);
         if (positions.stream()
-                     .anyMatch(p -> p.x() == end.x() && p.y() == end.y())) {
-          result = i;
-          break;
+                     .anyMatch(p -> end.equals(p.p()))) {
+          result = potentialCost;
         }
-        for (final Position p : positions) {
-          setDistance(p, ifinal);
-          final Map<Integer, Set<Position>> neighbours = getNeighbours(ifinal, p);
-          for (final Map.Entry<Integer, Set<Position>> entry : neighbours.entrySet()) {
+        for (final DirectionalPosition position : positions) {
+          setDistance(position, potentialCost);
+          final Map<Integer, Set<DirectionalPosition>> neighbours = getNeighbours(potentialCost, position);
+          for (final Map.Entry<Integer, Set<DirectionalPosition>> entry : neighbours.entrySet()) {
             possible.computeIfAbsent(entry.getKey(), k -> new HashSet<>())
                     .addAll(entry.getValue());
           }
         }
-        ;
       }
     }
+    printMap();
     return result;
   }
 
-  private void setDistance(final Position position, final int distance) {
-    chart.get(position.y())
-         .get(position.x())
+  private void setDistance(final DirectionalPosition position, final int distance) {
+    chart.get(position.p().y())
+         .get(position.p().x())
          .explored(position.d(), distance);
   }
 
-  private Map<Integer, Set<Position>> getNeighbours(final int offset, final Position position) {
-    final Map<Integer, Set<Position>> result = new HashMap<>();
-    addNeighbour(offset, position.d(), new Position(Direction.North, position.x(), position.y() - 1), result);
-    addNeighbour(offset, position.d(), new Position(Direction.South, position.x(), position.y() + 1), result);
-    addNeighbour(offset, position.d(), new Position(Direction.East, position.x() + 1, position.y()), result);
-    addNeighbour(offset, position.d(), new Position(Direction.West, position.x() - 1, position.y()), result);
+  private Map<Integer, Set<DirectionalPosition>> getNeighbours(final int offset, final DirectionalPosition position) {
+    final Map<Integer, Set<DirectionalPosition>> result = new HashMap<>();
+    addNeighbour(offset, position.d(), new DirectionalPosition(Direction.North, new Position(position.p().x(), position.p().y() - 1)), result);
+    addNeighbour(offset, position.d(), new DirectionalPosition(Direction.South, new Position(position.p().x(), position.p().y() + 1)), result);
+    addNeighbour(offset, position.d(), new DirectionalPosition(Direction.East, new Position(position.p().x() + 1, position.p().y())), result);
+    addNeighbour(offset, position.d(), new DirectionalPosition(Direction.West, new Position(position.p().x() - 1, position.p().y())), result);
     return result;
   }
 
-  private void addNeighbour(final int offset, final Direction direction, final Position position, final Map<Integer, Set<Position>> result) {
-    if (chart.get(position.y())
-             .get(position.x())
-             .isExplorable()) {
-      final int cost = offset + direction.costFrom(position.d());
+  private void addNeighbour(final int offset, final Direction direction, final DirectionalPosition position, final Map<Integer, Set<DirectionalPosition>> result) {
+    final int cost = offset + direction.costFrom(position.d());
+    if (chart.get(position.p().y())
+             .get(position.p().x())
+             .isExplorable(cost)) {
       result.computeIfAbsent(cost, k -> new HashSet<>())
             .add(position);
     }
   }
 
-  public void printMap() {
+  private void printMap() {
     System.out.println(chart.stream()
                             .map(line -> line.stream()
                                              .map(Cell::getChartChar)

@@ -14,16 +14,12 @@ class SolverTest {
   @Test
   void example2() {
     final Solver solver = assertDoesNotThrow(() -> new Solver("example2.txt"));
-    final int actual = solver.solve();
-    solver.printMap();
-    assertEquals(11048, actual);
+    assertEquals(11048, solver.solve());
   }
 
   @Test
   void input() {
     final Solver solver = assertDoesNotThrow(() -> new Solver("input.txt"));
-    final int actual = solver.solve();
-    solver.printMap();
-    System.out.println("part1 = " + actual);
+    System.out.println("part1 = " + solver.solve());
   }
 }

@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 
 public enum Direction {
   North, East, South, West;
+
   public int costFrom(final Direction d) {
     if (this == d) {
       return 1;
