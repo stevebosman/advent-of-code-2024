@@ -1,49 +1,65 @@
 package uk.co.stevebosman.aoc24;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Cell {
   private final boolean wall;
-  private final List<Direction> directions = new ArrayList<>();
-  private int distance;
+  private final Map<Direction, Integer> distances = new HashMap<>();
 
   public Cell(final int i) {
     this.wall = (i == '#');
   }
 
   public void explored(final Direction direction, final int distance) {
-    if (isExplorable(distance)) {
-      this.directions.add(direction);
-      this.distance = distance;
+    if (isExplorable(direction)) {
+      distances.put(direction, distance);
     }
   }
 
-  public boolean isExplorable(final int distance) {
-    return (this.distance == 0 || this.distance == distance) && !wall;
+  public boolean isExplorable(final Direction direction) {
+    return !wall && !distances.containsKey(direction) && !distances.containsKey(direction.opposite());
   }
 
-  public int getDistance() {
-    return distance;
+  public boolean isWall() {
+    return wall;
+  }
+
+  @Override
+  public String toString() {
+    return "Cell{" +
+            "wall=" + wall +
+            ", distances=" + distances +
+            '}';
+  }
+
+  public int getDistance(final Direction direction) {
+    return distances.getOrDefault(direction, -1);
   }
 
   public List<Direction> getDirections() {
-    return Collections.unmodifiableList(directions);
+    return List.copyOf(distances.keySet());
   }
 
   public String getChartChar() {
     if (wall) return "#";
-    if (directions.size() == 1) {
-      return switch (directions.getFirst()) {
+    if (distances.size() == 1) {
+      return switch (getDirections().getFirst()) {
         case North -> "^";
         case East -> ">";
         case South -> "v";
         case West -> "<";
       };
-    } else if (directions.size() > 1) {
+    } else if (distances.size() > 1) {
       return "x";
     }
     return ".";
+  }
+
+  public boolean hasDistanceLessThan(final int distance) {
+    return distances.values()
+                    .stream()
+                    .anyMatch(d -> d < distance);
   }
 }
