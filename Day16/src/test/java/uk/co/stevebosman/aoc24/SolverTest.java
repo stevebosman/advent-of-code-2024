@@ -8,18 +8,18 @@ class SolverTest {
   @Test
   void example1() {
     final Solver solver = assertDoesNotThrow(() -> new Solver("example1.txt"));
-    assertEquals(7036, solver.solve());
+    assertEquals(7036, solver.getCheapestRoute());
   }
 
   @Test
   void example2() {
     final Solver solver = assertDoesNotThrow(() -> new Solver("example2.txt"));
-    assertEquals(11048, solver.solve());
+    assertEquals(11048, solver.getCheapestRoute());
   }
 
   @Test
   void input() {
     final Solver solver = assertDoesNotThrow(() -> new Solver("input.txt"));
-    System.out.println("part1 = " + solver.solve());
+    System.out.println("part1 = " + solver.getCheapestRoute());
   }
 }

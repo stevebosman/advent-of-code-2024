@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 public class Solver {
   private final List<List<Cell>> chart;
   private final Set<DirectionalPosition> seats = new HashSet<>();
+  private final int cheapestRoute;
+  private final DirectionalPosition start;
+  private final Position end;
 
   public Solver(final String filename) throws IOException {
     try (final var lines = Files.lines(Path.of(filename))) {
@@ -22,12 +25,13 @@ public class Solver {
                                          .toList())
                         .toList();
     }
+    this.start = new DirectionalPosition(Direction.East, new Position(1, chart.size() - 2));
+    this.end = new Position(chart.getFirst().size() - 2, 1);
+    this.cheapestRoute = solve();
   }
 
-  public int solve() {
+  private int solve() {
     int result = 0;
-    final DirectionalPosition start = new DirectionalPosition(Direction.East, new Position(1, chart.size() - 2));
-    final Position end = new Position(chart.getFirst().size() - 2, 1);
     setDistance(start, 0);
     final Map<Integer, Set<DirectionalPosition>> possible = getNeighbours(0, start);
     for (int potentialCost = 1; potentialCost < 1_000_000 && result ==0; potentialCost++) {
@@ -50,6 +54,10 @@ public class Solver {
     }
     printMap();
     return result;
+  }
+
+  public int getCheapestRoute() {
+    return cheapestRoute;
   }
 
   private void setDistance(final DirectionalPosition position, final int distance) {
