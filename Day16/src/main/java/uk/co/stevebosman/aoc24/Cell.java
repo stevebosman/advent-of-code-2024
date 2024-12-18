@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class Cell {
   private final boolean wall;
+  private boolean route;
   private final Map<Direction, Integer> distances = new HashMap<>();
 
   public Cell(final int i) {
@@ -26,10 +27,15 @@ public class Cell {
     return wall;
   }
 
+  public void markOnRoute() {
+    route=true;
+  }
+
   @Override
   public String toString() {
     return "Cell{" +
             "wall=" + wall +
+            ", route=" + route +
             ", distances=" + distances +
             '}';
   }
@@ -42,24 +48,42 @@ public class Cell {
     return List.copyOf(distances.keySet());
   }
 
-  public String getChartChar() {
-    if (wall) return "#";
-    if (distances.size() == 1) {
-      return switch (getDirections().getFirst()) {
-        case North -> "^";
-        case East -> ">";
-        case South -> "v";
-        case West -> "<";
-      };
-    } else if (distances.size() > 1) {
-      return "x";
+  public String getChartChar(final boolean showRoute, final boolean showValue) {
+    String result;
+    if (wall) {
+      result = "#";
+    } else if (showRoute && route) {
+      result = "O";
+    } else if (!showRoute) {
+      if (distances.size() == 1) {
+        result = switch (getDirections().getFirst()) {
+          case North -> "^";
+          case East -> ">";
+          case South -> "v";
+          case West -> "<";
+        };
+      } else if (distances.size() > 1) {
+        result =  "x";
+      } else {
+        result = ".";
+      }
+    } else {
+      result = ".";
     }
-    return ".";
+    if (showValue) {
+      result+="-";
+      if (wall) result += "#".repeat(6);
+      else if (distances.isEmpty()) result += ".".repeat(6);
+      else if (distances.size()>1) result += "?".repeat(6);
+      else result += String.format("%06d", distances.values().stream().findFirst().get());
+      result+="}";
+    }
+    return result;
   }
 
-  public boolean hasDistanceLessThan(final int distance) {
+  public boolean hasNextDistance(final int distance) {
     return distances.values()
                     .stream()
-                    .anyMatch(d -> d < distance);
+                    .anyMatch(d -> distance - d == 1001 || distance - d == 1);
   }
 }

@@ -57,7 +57,7 @@ public class Solver {
         }
       }
     }
-    printMap();
+    printMap(false, false);
     return result;
   }
 
@@ -66,6 +66,9 @@ public class Solver {
     seats.add(end);
     Set<Position> potentialSeats = getNeighbours(end);
     while (!potentialSeats.isEmpty()) {
+      potentialSeats.forEach(p -> {
+        getCell(p).markOnRoute();
+      });
       seats.addAll(potentialSeats);
       final Set<Position> nextPotentialSeats = new HashSet<>();
       for (final Position potential : potentialSeats) {
@@ -74,6 +77,8 @@ public class Solver {
       potentialSeats = new TreeSet<>(nextPotentialSeats);
       potentialSeats.removeAll(seats);
     }
+    printMap(true, false);
+    printMap(true, true);
     return seats;
   }
 
@@ -126,15 +131,15 @@ public class Solver {
     final Cell currentCell = getCell(position);
     final Cell potentialCell = getCell(potentialPosition);
     final int distance = currentCell.getDistance(direction.opposite());
-    if (!potentialCell.isWall() && distance != -1 && potentialCell.hasDistanceLessThan(distance)) {
+    if (!potentialCell.isWall() && distance != -1 && potentialCell.hasNextDistance(distance)) {
       result.add(potentialPosition);
     }
   }
 
-  private void printMap() {
+  private void printMap(final boolean showRoute, final boolean showValues) {
     System.out.println(chart.stream()
                             .map(line -> line.stream()
-                                             .map(Cell::getChartChar)
+                                             .map(c -> c.getChartChar(showRoute, showValues))
                                              .collect(Collectors.joining()))
                             .collect(Collectors.joining("\n")));
     System.out.println("\n");
