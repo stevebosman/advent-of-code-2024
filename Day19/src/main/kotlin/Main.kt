@@ -4,6 +4,8 @@ fun main(args: Array<String>) {
     val puzzle = Puzzle.read(args[0])
     val designable = puzzle.designable()
     println("${designable.size}: $designable")
+    val patterns = puzzle.fullPatterns().values.sum()
+    println("${patterns}")
 }
 
 
