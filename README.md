@@ -21,7 +21,7 @@ My advent of code attempts - 2024
 | [Day 16](https://adventofcode.com/2024/day/16) | [Reindeer Maze](Day16/README.md)          | Java       |   ⭐    |        |
 | [Day 17](https://adventofcode.com/2024/day/17) | [Chronospatial Computer](Day17/README.md) | Kotlin     |   ⭐    |   🌟   |
 | [Day 18](https://adventofcode.com/2024/day/18) |                                           |            |        |        |
-| [Day 19](https://adventofcode.com/2024/day/19) |                                           |            |        |        |
+| [Day 19](https://adventofcode.com/2024/day/19) | [Linen Layout](Day19/README.md)           | Kotlin     |   ⭐    |   🌟   |
 | [Day 20](https://adventofcode.com/2024/day/20) |                                           |            |        |        |
 | [Day 21](https://adventofcode.com/2024/day/21) |                                           |            |        |        |
 | [Day 22](https://adventofcode.com/2024/day/22) |                                           |            |        |        |
