@@ -35,36 +35,28 @@ public record Solver(String filename) {
     return reversePath;
   }
 
-  public long cheatsSaveAtLeast(final long target) throws IOException {
+  public long cheatsSaveAtLeast(final long target, final int delay) throws IOException {
     final Grid<Character> grid = new GridReader<>(Function.identity()).read(filename);
     final Position start = grid.findFirst('S')
                                .orElseThrow(() -> new IllegalStateException("Start not found"));
     final Position end = grid.findFirst('E')
                              .orElseThrow(() -> new IllegalStateException("End not found"));
-    System.out.println("grid = " + grid);
-    System.out.println("start = " + start);
-    System.out.println("end = " + end);
-
     final List<Position> reversePath = getReversePath(grid, start, end);
-    System.out.println("reversePath = " + reversePath);
 
     long result = 0;
     for (int i = 4; i < reversePath.size(); i++) {
-      result += countTargetCheatsForPosition(target, reversePath, i, grid);
+      result += countTargetCheatsForPosition(target, reversePath, i, grid, delay);
     }
 
     return result;
   }
 
-  private long countTargetCheatsForPosition(final long target, final List<Position> reversePath, final int finalI, final Grid<Character> grid) {
-    return reversePath.get(finalI)
-                      .neighbourPairs(grid.bounds(), 1, 2)
+  private long countTargetCheatsForPosition(final long target, final List<Position> reversePath, final int index, final Grid<Character> grid, final int delay) {
+    return reversePath.get(index)
+                      .linesWithinLength(grid.bounds(), delay)
                       .stream()
-                      .filter(l -> '#' == grid.get(l.start())
-                                              .orElse('-') && '#' != grid.get(l.end())
-                                                                         .orElse('-'))
-                      .map(l -> finalI - reversePath.indexOf(l.end()) - 2)
-                      .filter(v -> v >= target)
+                      .filter(l -> '#' != grid.getOrElse(l.end(), '-')
+                              && index - reversePath.indexOf(l.end()) - l.manhattanDistance() >= target)
                       .count();
   }
 }

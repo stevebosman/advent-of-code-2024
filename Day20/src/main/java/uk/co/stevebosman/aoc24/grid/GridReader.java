@@ -9,7 +9,8 @@ import java.util.function.Function;
 public record GridReader<T>(Function<Character, T> mappingFunction) {
   public Grid<T> read(final String filename) throws IOException {
     try (final var lines = Files.lines(Path.of(filename))) {
-      return new Grid<>(lines.map(this::mapLine).toList());
+      return new Grid<>(lines.map(this::mapLine)
+                             .toList());
     }
   }
 

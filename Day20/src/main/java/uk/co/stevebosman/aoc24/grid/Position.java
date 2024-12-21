@@ -1,9 +1,12 @@
 package uk.co.stevebosman.aoc24.grid;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.lang.Math.abs;
 
 public record Position(int x, int y) implements Comparable<Position> {
 
@@ -16,6 +19,10 @@ public record Position(int x, int y) implements Comparable<Position> {
       case South -> new Position(x, y + offset);
       case West -> new Position(x - offset, y);
     };
+  }
+
+  public int manhattanDistance(final Position p) {
+    return Math.abs(x - p.x()) + Math.abs(y - p.y());
   }
 
   public Position neighbour(final Direction direction) {
@@ -35,11 +42,44 @@ public record Position(int x, int y) implements Comparable<Position> {
                  .collect(Collectors.toSet());
   }
 
-  public Set<Line> neighbourPairs(final GridBounds bounds, final int offsetStart, final int offsetEnd) {
+  public Set<Line> linesFromNeighbours(final GridBounds bounds, final int offsetStart, final int offsetEnd) {
     return Arrays.stream(Direction.values())
                  .map(d -> new Line(neighbour(d, offsetStart), neighbour(d, offsetEnd)))
                  .filter(line -> bounds.contains(line.end()))
                  .collect(Collectors.toSet());
+  }
+
+  public Set<Line> linesFromNeighboursUnderLength(final GridBounds bounds, final int length) {
+    return Arrays.stream(Direction.values())
+                 .map(this::neighbour)
+                 .filter(bounds::contains)
+                 .flatMap(p -> p.pointsInManhattanDistance(bounds, length)
+                                .stream()
+                                .filter(bounds::contains)
+                                .map(p2 -> new Line(p, p2)))
+                 .collect(Collectors.toSet());
+  }
+
+  public Set<Line> linesWithinLength(final GridBounds bounds, final int length) {
+    return this.pointsInManhattanDistance(bounds, length)
+               .stream()
+               .filter(bounds::contains)
+               .map(p2 -> new Line(this, p2))
+               .collect(Collectors.toSet());
+  }
+
+  public Set<Position> pointsInManhattanDistance(final GridBounds bounds, final int length) {
+    final Set<Position> space = new HashSet<>();
+    for (int dx = -length; dx <= length; dx++) {
+      for (int dy = -length; dy <= length; dy++) {
+        if ((dx != 0 || dy != 0) && abs(dx) + abs(dy) <= length) {
+          if (bounds.contains(x + dx, y + dy)) {
+            space.add(new Position(this.x + dx, this.y + dy));
+          }
+        }
+      }
+    }
+    return space;
   }
 
   @Override
