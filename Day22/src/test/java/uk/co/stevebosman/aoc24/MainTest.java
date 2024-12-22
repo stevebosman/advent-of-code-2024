@@ -4,12 +4,15 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class MainTest {
   @Test
   void example1() throws IOException {
     Main.main(new String[]{"example1.txt"});
+  }
+
+  @Test
+  void example2() throws IOException {
+    Main.main(new String[]{"example2.txt"});
   }
 
   @Test
