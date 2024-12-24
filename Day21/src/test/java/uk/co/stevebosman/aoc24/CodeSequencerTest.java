@@ -11,6 +11,13 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CodeSequencerTest {
+  @Test
+  void example1() {
+    final int actual = assertDoesNotThrow(() -> CodeSequencer.part1("example1.txt"));
+    assertEquals(126384, actual);
+  }
+
+
   @ParameterizedTest
   @CsvSource({
           "029A, 0, <A^A>^^AvvvA|<A^A^>^AvvvA|<A^A^^>AvvvA"

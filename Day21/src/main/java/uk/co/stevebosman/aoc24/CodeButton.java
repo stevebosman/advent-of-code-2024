@@ -39,13 +39,13 @@ public enum CodeButton {
                         entry(ONE,
                               List.of("^<<A", "<^<A")),
                         entry(TWO,
-                              List.of("^<A", "<^A")),
+                              List.of("<^A", "^<A")),
                         entry(THREE,
                               List.of("^A")),
                         entry(FOUR,
                               List.of("^^<<A", "^<<^A", "<^<^A", "^<^<A", "<^^<A")),
                         entry(FIVE,
-                              List.of("^^<A", "^<^A", "<^^A")),
+                              List.of("<^^A", "^^<A", "^<^A")),
                         entry(SIX,
                               List.of("^^A")),
                         entry(SEVEN,
@@ -81,7 +81,7 @@ public enum CodeButton {
                         entry(NINE, List.of()))),
           entry(TWO,
                 Map.ofEntries(
-                        entry(A, List.of(">vA", "v>A")),
+                        entry(A, List.of("v>A", ">vA")),
                         entry(ZERO, List.of()),
                         entry(ONE, List.of()),
                         entry(THREE, List.of(">A")),
@@ -117,7 +117,7 @@ public enum CodeButton {
                         entry(NINE, List.of()))),
           entry(FIVE,
                 Map.ofEntries(
-                        entry(A, List.of(">vvA", "v>vA", "vv>A")),
+                        entry(A, List.of("vv>A", ">vvA", "v>vA")),
                         entry(ZERO, List.of()),
                         entry(ONE, List.of()),
                         entry(TWO, List.of()),
@@ -137,7 +137,7 @@ public enum CodeButton {
                         entry(FOUR, List.of()),
                         entry(FIVE, List.of()),
                         entry(SEVEN, List.of()),
-                        entry(EIGHT, List.of("^<A", "<^A")),
+                        entry(EIGHT, List.of("<^A", "^<A")),
                         entry(NINE, List.of()))),
           entry(SEVEN,
                 Map.ofEntries(
@@ -153,7 +153,7 @@ public enum CodeButton {
                         entry(EIGHT, List.of(">A")),
                         entry(NINE, List.of(">>A")))),
           entry(EIGHT,
-                Map.ofEntries(entry(A, List.of(">vvvA", "v>vvA", "vv>vA", "vvv>A")),
+                Map.ofEntries(entry(A, List.of("vvv>A", ">vvvA", "v>vvA", "vv>vA")),
                               entry(ZERO, List.of("vvvA")),
                               entry(ONE, List.of()),
                               entry(TWO, List.of("vvA")),
@@ -187,6 +187,21 @@ public enum CodeButton {
       case '9' -> NINE;
       default -> throw new IllegalArgumentException("Unknown code: " + code);
     };
+  }
+
+  public static void expandAll(final int depth) {
+    presses.forEach((key, value) -> value.entrySet()
+                                         .stream()
+                                         .filter(inner -> inner.getValue().size()>1)
+                                         .forEach(inner -> {
+                                           System.out.println(key + "->" + inner.getKey());
+                                           inner.getValue()
+                                                .forEach(directions -> {
+                                                  final String expanded = DirectionButton.expand(depth, directions);
+                                                  System.out.println(
+                                                          directions + ": (" + expanded.length() + ") " + expanded);
+                                                });
+                                         }));
   }
 
   public String toFirst(final CodeButton d) {
