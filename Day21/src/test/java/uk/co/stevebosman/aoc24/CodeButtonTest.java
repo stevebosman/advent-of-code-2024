@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 public class CodeButtonTest {
   @Test
   void expandAll() {
-    CodeButton.expandAll(2);
+    CodeButton.expandAll(5);
+  }
+  @Test
+  void expandLengths() {
+    CodeButton.expandLengths(25);
   }
 }

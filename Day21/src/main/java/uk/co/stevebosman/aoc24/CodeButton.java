@@ -204,6 +204,19 @@ public enum CodeButton {
                                          }));
   }
 
+  public static void expandLengths(final int depth) {
+    presses.forEach((key, value) -> value.entrySet()
+                                         .stream()
+                                         .filter(inner -> !inner.getValue().isEmpty())
+                                         .forEach(inner -> {
+                                           System.out.println(key + "->" + inner.getKey());
+                                           final String directions = inner.getValue().getFirst();
+                                           final long expanded = DirectionButton.expandedLength(depth, directions);
+                                           System.out.println(
+                                                   directions + ": (" + expanded + ")");
+                                         }));
+  }
+
   public String toFirst(final CodeButton d) {
     if (this == d) return "A";
     final List<String> directions = presses.get(this)

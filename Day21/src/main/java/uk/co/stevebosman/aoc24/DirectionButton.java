@@ -86,8 +86,26 @@ public enum DirectionButton {
         currentDirection = next;
       }
       expanded = directionBuilder.toString();
-      System.out.println(code + ": depth " + i + " = " + expanded);
+      System.out.println(code + ": depth " + i + " (" + expanded.length() + ") = " + expanded);
     }
     return expanded;
+  }
+
+  public static long expandedLength(final int depth, final String code) {
+    long result = 0;
+    StringBuilder expanded = new StringBuilder(code);
+    for (int i = 1; i <= depth; i++) {
+      DirectionButton currentDirection = DirectionButton.A;
+      final StringBuilder directionBuilder = new StringBuilder();
+      for (int j = 0; j < expanded.length(); j++) {
+        final DirectionButton next = DirectionButton.of(expanded.charAt(j));
+        directionBuilder.append(currentDirection.toFirst(next));
+        currentDirection = next;
+      }
+      expanded = directionBuilder;
+      result = expanded.length();
+//      System.out.println(code + ": depth " + i + " (" + expanded.length() + ")");
+    }
+    return result;
   }
 }
