@@ -11,6 +11,11 @@ class MainTest {
   }
 
   @Test
+  void example2() throws IOException {
+    Main.main(new String[]{"example2.txt"});
+  }
+
+  @Test
   void input() throws IOException {
     Main.main(new String[]{"input.txt"});
   }
