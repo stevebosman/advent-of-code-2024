@@ -27,7 +27,7 @@ My advent of code attempts - 2024
 | [Day 22](https://adventofcode.com/2024/day/22) | [Monkey Market](Day22/README.md)          | Java       |   ⭐    |   🌟   |
 | [Day 23](https://adventofcode.com/2024/day/23) | [LAN Party](Day23/README.md)              | Java       |   ⭐    |   🌟   |
 | [Day 24](https://adventofcode.com/2024/day/24) | [Crossed Wires](Day24/README.md)          | Java       |   ⭐    |   🌟🤔 |
-| [Day 25](https://adventofcode.com/2024/day/25) | [⛔Code Chronicle](Day25/README.md)       | Java       |        |        |
+| [Day 25](https://adventofcode.com/2024/day/25) | [Code Chronicle](Day25/README.md)         | Java       |   ⭐    |        |
 
 - ⛔ Unstarted
 - 🤔 Solved by inspection
