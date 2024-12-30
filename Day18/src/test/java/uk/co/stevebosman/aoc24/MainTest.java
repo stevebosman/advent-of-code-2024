@@ -7,11 +7,11 @@ import java.io.IOException;
 class MainTest {
   @Test
   void example1() throws IOException {
-    Main.main(new String[]{"example1.txt"});
+    Main.main(new String[]{"example1.txt", "6", "12"});
   }
 
   @Test
   void input() throws IOException {
-    Main.main(new String[]{"input.txt"});
+    Main.main(new String[]{"input.txt", "70", "1024"});
   }
 }
