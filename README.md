@@ -20,7 +20,7 @@ My advent of code attempts - 2024
 | [Day 15](https://adventofcode.com/2024/day/15) | [Wareful Woes](Day15/README.md)           | Java       |   ⭐    |   🌟   |
 | [Day 16](https://adventofcode.com/2024/day/16) | [Reindeer Maze](Day16/README.md)          | Java       |   ⭐    |        |
 | [Day 17](https://adventofcode.com/2024/day/17) | [Chronospatial Computer](Day17/README.md) | Kotlin     |   ⭐    |   🌟   |
-| [Day 18](https://adventofcode.com/2024/day/18) | [RAM Run](Day18/README.md)                | Java       |   ⭐♻️  |        |
+| [Day 18](https://adventofcode.com/2024/day/18) | [RAM Run](Day18/README.md)                | Java       |   ⭐♻️  |   🌟📉 |
 | [Day 19](https://adventofcode.com/2024/day/19) | [Linen Layout](Day19/README.md)           | Kotlin     |   ⭐    |   🌟   |
 | [Day 20](https://adventofcode.com/2024/day/20) | [Race Condition](Day20/README.md)         | Java       |   ⭐    |   🌟   |
 | [Day 21](https://adventofcode.com/2024/day/21) | [Keypad Conundrum](Day21/README.md)       | Java       |   ⭐    |        |
@@ -30,4 +30,5 @@ My advent of code attempts - 2024
 | [Day 25](https://adventofcode.com/2024/day/25) | [Code Chronicle](Day25/README.md)         | Java       |   ⭐    |        |
 
 - ♻️ Generated a maze and threw into Day 16's code
+- 📉 hand cranked binary search
 - 🤔 Solved by inspection
