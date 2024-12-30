@@ -1,5 +1,6 @@
 package uk.co.stevebosman.aoc24;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,7 @@ public enum DirectionButton {
           entry(RIGHT,
                 Map.ofEntries(
                         entry(A, List.of("^A")),
-                        entry(UP, List.of("^<A", "<^A")),
+                        entry(UP, List.of("<^A", "^<A")),
                         entry(DOWN, List.of("<A")),
                         entry(LEFT, List.of("<<A"))))
   );
@@ -65,16 +66,6 @@ public enum DirectionButton {
     };
   }
 
-  public String toFirst(final DirectionButton d) {
-    if (this==d) return "A";
-    final List<String> directions = presses.get(this)
-                                           .get(d);
-    if (directions == null || directions.isEmpty()) {
-      throw new UnsupportedOperationException(this + " to " + d + " has not been implemented");
-    }
-    return directions.getFirst();
-  }
-
   public static String expand(final int depth, final String code) {
     String expanded = code;
     for (int i = 1; i <= depth; i++) {
@@ -86,26 +77,34 @@ public enum DirectionButton {
         currentDirection = next;
       }
       expanded = directionBuilder.toString();
-      System.out.println(code + ": depth " + i + " (" + expanded.length() + ") = " + expanded);
     }
     return expanded;
   }
 
+  private static final Map<String, Long> MEMO = new HashMap<>();
+
   public static long expandedLength(final int depth, final String code) {
+    if (depth == 0) return code.length();
+    final String memoKey = code + depth;
+    if (MEMO.containsKey(memoKey)) return MEMO.get(memoKey);
     long result = 0;
-    StringBuilder expanded = new StringBuilder(code);
-    for (int i = 1; i <= depth; i++) {
-      DirectionButton currentDirection = DirectionButton.A;
-      final StringBuilder directionBuilder = new StringBuilder();
-      for (int j = 0; j < expanded.length(); j++) {
-        final DirectionButton next = DirectionButton.of(expanded.charAt(j));
-        directionBuilder.append(currentDirection.toFirst(next));
-        currentDirection = next;
-      }
-      expanded = directionBuilder;
-      result = expanded.length();
-//      System.out.println(code + ": depth " + i + " (" + expanded.length() + ")");
+    DirectionButton currentDirection = DirectionButton.A;
+    for (int j = 0; j < code.length(); j++) {
+      final DirectionButton next = DirectionButton.of(code.charAt(j));
+      result += expandedLength(depth - 1, currentDirection.toFirst(next));
+      currentDirection = next;
     }
+    MEMO.put(memoKey, result);
     return result;
+  }
+
+  public String toFirst(final DirectionButton d) {
+    if (this == d) return "A";
+    final List<String> directions = presses.get(this)
+                                           .get(d);
+    if (directions == null || directions.isEmpty()) {
+      throw new UnsupportedOperationException(this + " to " + d + " has not been implemented");
+    }
+    return directions.getFirst();
   }
 }

@@ -11,6 +11,14 @@ public class CodeSequencer {
     this.code = code;
   }
 
+  public static long lengthAtDepth(final String filename, final int depth) throws IOException {
+    try (final var codes = Files.lines(Path.of(filename))) {
+      return codes.map(CodeSequencer::new)
+                  .map(seq -> seq.instructionLength(depth) * seq.numeric())
+                  .reduce(0L, Long::sum);
+    }
+  }
+
   public String instructions(final int depth) {
     if (depth < 0) throw new IllegalArgumentException("depth should be greater than 1");
     final StringBuilder expandedBuilder = new StringBuilder();
@@ -21,7 +29,7 @@ public class CodeSequencer {
       current = next;
     }
     String expanded = expandedBuilder.toString();
-    System.out.println(code + ": depth 0 = " + expanded);
+//    System.out.println(code + ": depth 0 = " + expanded);
     for (int i = 1; i <= depth; i++) {
       DirectionButton currentDirection = DirectionButton.A;
       final StringBuilder directionBuilder = new StringBuilder();
@@ -31,23 +39,26 @@ public class CodeSequencer {
         currentDirection = next;
       }
       expanded = directionBuilder.toString();
-      System.out.println(code + ": depth " + i + " = " + expanded);
     }
-    System.out.println(numeric() + " * " + expanded.length());
+    System.out.println(code + " to depth " + depth + ": " + numeric() + " * " + expanded.length());
     return expanded;
+  }
+
+  public long instructionLength(final int depth) {
+    if (depth < 0) throw new IllegalArgumentException("depth should be greater than 1");
+    long length = 0;
+    CodeButton current = CodeButton.A;
+    for (int i = 0; i < code.length(); i++) {
+      final CodeButton next = CodeButton.of(code.charAt(i));
+      length += DirectionButton.expandedLength(depth, current.toFirst(next));
+      current = next;
+    }
+    System.out.println(code + " to depth " + depth + ": " + numeric() + " * " + length);
+    return length;
   }
 
   public int numeric() {
     return Integer.parseInt(code.replaceAll("^0*([0-9]*)A$", "$1"));
-  }
-
-  public static int part1(final String filename) throws IOException {
-    try (final var codes = Files.lines(Path.of(filename))) {
-      return codes.map(CodeSequencer::new)
-                  .map(seq -> seq.instructions(2)
-                                 .length() * seq.numeric())
-                  .reduce(0, Integer::sum);
-    }
   }
 }
 

@@ -13,10 +13,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class CodeSequencerTest {
   @Test
   void example1() {
-    final int actual = assertDoesNotThrow(() -> CodeSequencer.part1("example1.txt"));
-    assertEquals(126384, actual);
+    final long actual = assertDoesNotThrow(() -> CodeSequencer.lengthAtDepth("example1.txt", 2));
+    assertEquals(126384L, actual);
   }
 
+  @Test
+  void input() {
+    final long actual = assertDoesNotThrow(() -> CodeSequencer.lengthAtDepth("input.txt", 2));
+    assertEquals(278568L, actual);
+  }
+
+//  @Test
+//  void input_5() {
+//    final int actual = assertDoesNotThrow(() -> CodeSequencer.lengthAtDepth("input.txt", 25));
+//    assertEquals(278568, actual);
+//  }
 
   @ParameterizedTest
   @CsvSource({
