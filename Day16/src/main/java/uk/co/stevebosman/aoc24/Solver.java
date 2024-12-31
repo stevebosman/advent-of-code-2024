@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class Solver {
   private final List<List<Cell>> chart;
-  private final Set<Position> seats;
+  private final List<Position> seats;
   private final int cheapestRoute;
   private final DirectionalPosition start;
   private final Position end;
@@ -26,11 +26,11 @@ public class Solver {
                                          .toList())
                         .toList();
     }
-    this.start = new DirectionalPosition(Direction.East, new Position(1, chart.size() - 2));
-    this.end = new Position(chart.getFirst()
-                                 .size() - 2, 1);
+    this.start = new DirectionalPosition(Direction.East, new Position(chart.size() - 2, 1));
+    this.end = new Position(1, chart.getFirst()
+                                    .size() - 2);
     this.cheapestRoute = solve();
-    this.seats = findSeats();
+    this.seats = findSeats().stream().sorted().toList();
   }
 
   private int solve() {
@@ -43,12 +43,14 @@ public class Solver {
         final Set<DirectionalPosition> positions = possible.get(potentialCost);
         possible.remove(potentialCost);
         if (positions.stream()
-                     .anyMatch(p -> end.equals(p.p()))) {
+                     .anyMatch(p -> end.equals(p.position()))) {
           result = potentialCost;
         }
         for (final DirectionalPosition position : positions) {
-          setDistance(position, potentialCost);
           final Map<Integer, Set<DirectionalPosition>> neighbours = getNeighbours(potentialCost, position);
+          if (!neighbours.isEmpty() || end.equals(position.position())) {
+            setDistance(position, potentialCost);
+          }
 //          System.out.println("neighbours of " + position + ": " + neighbours);
           for (final Map.Entry<Integer, Set<DirectionalPosition>> entry : neighbours.entrySet()) {
             possible.computeIfAbsent(entry.getKey(), k -> new HashSet<>())
@@ -92,27 +94,27 @@ public class Solver {
   }
 
   private void setDistance(final DirectionalPosition position, final int distance) {
-    getCell(position.p()).explored(position.d(), distance);
-//    System.out.println("setDistance: " + distance + "@" + position + " => " + getCell(position.p()));
+    getCell(position.position()).explored(position.direction(), distance);
+//    System.out.println("setDistance: " + distance + "@" + position + " => " + getCell(position.position()));
   }
 
   private Cell getCell(final Position position) {
-    return chart.get(position.y())
-                .get(position.x());
+    return chart.get(position.row())
+                .get(position.column());
   }
 
   private Map<Integer, Set<DirectionalPosition>> getNeighbours(final int offset, final DirectionalPosition position) {
     final Map<Integer, Set<DirectionalPosition>> result = new HashMap<>();
     for (final Direction direction : Direction.values()) {
-      addNeighbour(offset, position.d(), position.neighbour(direction), result);
+      addNeighbour(offset, position.direction(), position.neighbour(direction), result);
     }
     return result;
   }
 
   private void addNeighbour(final int offset, final Direction direction, final DirectionalPosition position, final Map<Integer, Set<DirectionalPosition>> result) {
-    final int cost = offset + direction.costFrom(position.d());
-    if (getCell(position.p()).isExplorable(direction) && direction != position.d()
-                                                                              .opposite()) {
+    final int cost = offset + direction.costFrom(position.direction());
+    final Cell cell = getCell(position.position());
+    if (cell.isExplorable(position.direction()) && !direction.isOppositeOf(position.direction())) {
       result.computeIfAbsent(cost, k -> new HashSet<>())
             .add(position);
     }
@@ -131,7 +133,7 @@ public class Solver {
     final Cell currentCell = getCell(position);
     final Cell potentialCell = getCell(potentialPosition);
     final int distance = currentCell.getDistance(direction.opposite());
-    if (!potentialCell.isWall() && distance != -1 && potentialCell.hasNextDistance(distance)) {
+    if (!potentialCell.isWall() && distance != -1 && potentialCell.hasNextDistance(distance, direction.opposite())) {
       result.add(potentialPosition);
     }
   }

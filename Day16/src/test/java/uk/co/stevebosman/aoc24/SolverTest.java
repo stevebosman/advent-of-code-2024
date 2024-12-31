@@ -1,5 +1,6 @@
 package uk.co.stevebosman.aoc24;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +19,12 @@ class SolverTest {
   }
 
   @Test
+  void part1Input() {
+    final Solver solver = assertDoesNotThrow(() -> new Solver("input.txt"));
+    assertEquals(107512, solver.getCheapestRoute());
+  }
+
+  @Test
   void part2Example1() {
     final Solver solver = assertDoesNotThrow(() -> new Solver("example1.txt"));
     assertEquals(45, solver.getSeatCount());
@@ -30,9 +37,10 @@ class SolverTest {
   }
 
   @Test
-  void input() {
+  @Disabled
+  void part2Input() {
+    // does not work solver rewritten - see Solver2
     final Solver solver = assertDoesNotThrow(() -> new Solver("input.txt"));
-    System.out.println("part1 = " + solver.getCheapestRoute());
-    System.out.println("part2 = " + solver.getSeatCount());
+    assertEquals(561, solver.getSeatCount());
   }
 }

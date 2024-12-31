@@ -63,7 +63,7 @@ public class Cell {
           case West -> "<";
         };
       } else if (distances.size() > 1) {
-        result =  "x";
+        result =  "X";
       } else {
         result = ".";
       }
@@ -81,9 +81,9 @@ public class Cell {
     return result;
   }
 
-  public boolean hasNextDistance(final int distance) {
-    return distances.values()
+  public boolean hasNextDistance(final int distance, final Direction direction) {
+    return distances.entrySet()
                     .stream()
-                    .anyMatch(d -> distance - d == 1001 || distance - d == 1);
+                    .anyMatch(e -> (e.getKey().isOrthogonalTo(direction) && distance - e.getValue() == 1001) || (e.getKey() == direction && distance - e.getValue() == 1));
   }
 }
